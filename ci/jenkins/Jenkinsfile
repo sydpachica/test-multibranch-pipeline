@@ -1,0 +1,36 @@
+pipeline {
+    agent {
+        docker { image 'artifactory.ap.manulife.com/docker/devops-ci-image:2.5.7' }
+    }
+    
+    stages {
+        stage('Audit Tools') {
+            steps {
+                echo '''
+                    git --version
+                    docker --version
+                    python --version
+                '''
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building binaries...'
+            }
+        }
+        stage('Test') {
+            parallel {
+                stage('Module Test 1') {
+                    steps {
+                        echo 'Running ModuleTest1...'
+                    }
+                }
+                stage('Unit Test 1') {                    
+                    steps {
+                        echo 'Running Unit Test 1...'
+                    }
+                }
+            }
+        }
+    }
+}
